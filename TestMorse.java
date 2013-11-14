@@ -15,7 +15,6 @@ public class TestMorse {
         System.out.println(str);*/
 
         Morse morseObj = new Morse();
-        morseObj.initDictionnary("./dict.ini");
     	
 	}
 

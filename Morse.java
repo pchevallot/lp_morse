@@ -10,6 +10,7 @@ public class Morse {
 	// Définition des attributs
 	private HashMap<String,String> alphaVersmorse;
 	private HashMap<String,String> morseVersalpha;
+	private String dictionnaryPath = "./dict.ini";
 
 	// Définition des constantes
 	public static final String WORD_SEPARATOR_MORSE = "   ";
@@ -25,66 +26,8 @@ public class Morse {
 		this.alphaVersmorse = new HashMap<String,String>();
 		this.morseVersalpha = new HashMap<String,String>();
 
-		// ALPHABET - Codes récupérés sur l'article Wikipedia
-		// http://fr.wikipedia.org/wiki/Morse_(alphabet)
-		enregistre("a", ".-");
-		enregistre("b", "-...");
-		enregistre("c", "-.-.");
-		enregistre("d", "-..");
-		enregistre("e", ".");
-		enregistre("f", "..-.	");
-		enregistre("g", "--.");
-		enregistre("h", "....");
-		enregistre("i", "..");
-		enregistre("j", ".---");
-		enregistre("k", "-.-");
-		enregistre("l", ".-..");
-		enregistre("m", "--");
-		enregistre("n", "-.");
-		enregistre("o", "---");
-		enregistre("p", ".--.");
-		enregistre("q", "--.-");
-		enregistre("r", ".-.");
-		enregistre("s", "...");
-		enregistre("t", "-");
-		enregistre("u", "..-");
-		enregistre("v", "...-");
-		enregistre("w", ".--");
-		enregistre("x", "-..-");
-		enregistre("y", "-.--");
-		enregistre("z", "--..");
-
-		// CHIFFRES
-		enregistre("0", "-----");
-		enregistre("1", ".----");
-		enregistre("2", "..---");
-		enregistre("3", "...--");
-		enregistre("4", "....-");
-		enregistre("5", ".....");
-		enregistre("6", "-....");
-		enregistre("7", "--...");
-		enregistre("8", "---..");
-		enregistre("9", "----.");
-		
-		// PONCTUATION
-		enregistre(".", ".-.-.-");
-		enregistre(",", "--..--");
-		enregistre("?", "..--..");
-		enregistre("'",".----.");
-		enregistre("!", "-.-.--");
-		enregistre("/", "-..-.");
-		enregistre("(", "-.--.");
-		enregistre(")", "-.--.-");
-		enregistre("&", ".-...");
-		enregistre(":", "---...");
-		enregistre(";", "-.-.-.");
-		enregistre("=", "-...-");
-		enregistre("+", ".-.-.");
-		enregistre("-", ".-.-.");
-		enregistre("_", ".-.-.");
-		enregistre("\"", ".-..-.");
-		enregistre("$", "...-..-");
-		enregistre("@", ".--.-.");
+		// Initialisation du dictionnaire
+		initDictionnary(dictionnaryPath);
 	}
 
 	// méthode appelée par le constructeur pour charger les conversions
@@ -126,7 +69,7 @@ public class Morse {
 				str = scan.nextLine();
 				m = reg.matcher(str);
 				if(m.matches()) {
-					System.out.println(str);
+					enregistre(m.group(1), m.group(2));
 				}
 			}
 		} catch(FileNotFoundException e) {
