@@ -7,3 +7,6 @@
 
 # ODT Files #
 .~lock.*
+
+# Eclipse files #
+.metadata*

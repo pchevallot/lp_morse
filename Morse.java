@@ -5,7 +5,7 @@ import java.util.*;
  * Classe Morse
  */
 public class Morse {
-	// Définition des variables
+	// Définition des attributs
 	private HashMap<String,String> alphaVersmorse;
 	private HashMap<String,String> morseVersalpha;
 
@@ -19,6 +19,7 @@ public class Morse {
 	 * Constructeur de la classe Morse
 	 */
 	public Morse() {
+		// Initialisation des attributs
 		this.alphaVersmorse = new HashMap<String,String>();
 		this.morseVersalpha = new HashMap<String,String>();
 
