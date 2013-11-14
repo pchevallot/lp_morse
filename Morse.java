@@ -133,5 +133,35 @@ public class Morse {
 			System.out.println("Erreur de lecture fichier : " + e.getMessage());
 		}
 	}
+	
+	/**
+	 * Fonction readFile
+	 * Fonction qui lit un fichier ligne par ligne et en fait une chaine
+	 * @param f : fichier en entrée
+	 * @return la chaine de caractère
+	 */
+	private static String readFile(String f)
+	{
+		Scanner sc = null;
+
+		try
+		{
+			sc = new Scanner(new FileInputStream(f));
+			String row = null;
+			String text = null;
+			while (sc.hasNextLine( ))
+			{
+				row = sc.nextLine( );
+				text = text + row;
+			}
+			sc.close();
+			return text;
+		}
+		catch(FileNotFoundException e)
+		{
+			System.out.println("Erreur de lecture de fichier : " + e.getMessage());
+			return null;
+		}
+	}
 }
 
