@@ -1,5 +1,5 @@
 // package lp_morse;
-import java.util.*;
+// import java.util.*;
 
 public class TestMorse {
 
