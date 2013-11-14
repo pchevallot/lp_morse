@@ -72,6 +72,7 @@ public class Morse {
 					enregistre(m.group(1), m.group(2));
 				}
 			}
+			scan.close();
 		} catch(FileNotFoundException e) {
 			System.out.println("Erreur de lecture fichier : " + e.getMessage());
 		}
