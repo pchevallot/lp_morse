@@ -35,10 +35,15 @@ public class Morse {
 
 	// méthode appelée par le constructeur pour charger les conversions
 	// Avec 'put' on ajoute un couple 'clé-valeur'
-	private void enregistre(String lettre, String point) {
+	private void putDict(String lettre, String point) {
 		this.alphaVersmorse.put(lettre, point);	// pour conversion alphabet vers morse
 		this.morseVersalpha.put(point,lettre);	// pour conversion morse vers alphabet
-	}		
+	}
+
+	private void delDict(String lettre) {
+		this.alphaVersmorse.remove(lettre);	// pour conversion alphabet vers morse
+		this.morseVersalpha.remove(point);	// pour conversion morse vers alphabet
+	}
 
 	/**
 	 * Fonction alphaToMorseChar
@@ -112,13 +117,43 @@ public class Morse {
 				str = scan.nextLine();
 				m = reg.matcher(str);
 				if(m.matches()) {
-					enregistre(m.group(1), m.group(2));
+					this.putDict(m.group(1), m.group(2));
 				}
 			}
 			scan.close();
 		} catch(FileNotFoundException e) {
 			System.out.println("Erreur de lecture fichier : " + e.getMessage());
 		}
+	}
+
+	public String getDictionnary() {
+		String result = "";
+		for (Map.Entry<String, String> entry : alphaVersmorse.entrySet()) {
+			result += "[" + entry.getKey() +  "] -> " + entry.getValue() + "\n";
+		}
+		return result;
+	}
+
+	public void addToDictionnary(String charAlpha, String charMorse) {
+		Pattern patAlpha = Pattern.compile("^(.)$");
+		Pattern patMorse = Pattern.compile("^([\\.|-]+)$");
+		Matcher mAlpha = patAlpha.matcher(charAlpha);
+		Matcher mMorse = patMorse.matcher(charMorse);
+
+		if(!mAlpha.matches() || !mMorse.matches())
+			throw new IllegalArgumentException("Mauvais couple de valeur. Spécifié : ["+ charAlpha +"] -> "+ charMorse);
+
+		this.putDict(mAlpha.group(1), mMorse.group(1));
+	}
+
+	public void removeFromDictionnary(String charAlpha) {
+		Pattern patAlpha = Pattern.compile("^(.)$");
+		Matcher mAlpha = patAlpha.matcher(charAlpha);
+
+		if(!mAlpha.matches())
+			throw new IllegalArgumentException("Mauvaise clé. Spécifié : ["+ charAlpha +"]");
+
+		this.delDict(mAlpha.group(1));
 	}
 	
 	/**
