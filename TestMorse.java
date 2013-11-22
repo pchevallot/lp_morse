@@ -4,7 +4,7 @@
 public class TestMorse {
 
 	public static void main(String[] args) {
-		/*Scanner sc = new Scanner( System.in );
+		/* Scanner sc = new Scanner( System.in );
 		System.out.println("Saisissez une phrase à convertir : ");
        
 		Morse morse = new Morse();
@@ -12,7 +12,7 @@ public class TestMorse {
         String str = morse.alphaToMorse(phrase);
         
         // String str = morse.morseToAlpha(phrase);
-        System.out.println(str);*/
+        System.out.println(str); */
 
         Morse morseObj = new Morse();
     	// println(morseObj.readFile("./dict.ini"));
