@@ -48,7 +48,9 @@ public class Morse {
 	 * @return le chaîne en morse
 	 */
 	public String alphaToMorseChar(String lettre) {
-		return this.alphaVersmorse.get(lettre.toLowerCase());
+		String result = this.alphaVersmorse.get(lettre.toLowerCase());
+		if(result == null) throw new IllegalArgumentException("Caractère absent du dictionnaire. Spécifié : " + lettre);
+		return result;
 	}
 	
 	public String morseToAlphaChar(String morse){
@@ -66,9 +68,9 @@ public class Morse {
 		String result = "";
 		String[] tWords = entry.split(Morse.WORD_SEPARATOR_ALPHA);
 		String[] tChars;
-		for(int i = 0; i <= tWords.length; i++) {
+		for(int i = 0; i < tWords.length; i++) {
 			tChars = tWords[i].split(Morse.CHAR_SEPARATOR_ALPHA);
-			for(int j = 0; j <= tChars.length; j++) {
+			for(int j = 1; j < tChars.length; j++) {
 				result += this.alphaToMorseChar(tChars[j]) + Morse.CHAR_SEPARATOR_MORSE;
 			}
 			result += Morse.WORD_SEPARATOR_MORSE;
@@ -79,13 +81,13 @@ public class Morse {
 
 	// traduit du morse vers l'alphabet en forçant en minuscules
 	public String morseToAlpha(String entry) {
-		entry = entry.trim();
 		String result = "";
 		String[] tWords = entry.split(Morse.WORD_SEPARATOR_MORSE);
 		String[] tChars;
 		for(int i = 0; i < tWords.length; i++) {
 			tChars = tWords[i].split(Morse.CHAR_SEPARATOR_MORSE);
-			for(int j = 1; j < tChars.length; j++) {
+			for(int j = 0; j < tChars.length; j++) {
+				if(i > 0 && j == 0) j++;
 				result += this.morseToAlphaChar(tChars[j]) + Morse.CHAR_SEPARATOR_ALPHA;
 			}
 			result += Morse.WORD_SEPARATOR_ALPHA;
