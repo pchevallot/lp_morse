@@ -50,30 +50,47 @@ public class Morse {
 	public String alphaToMorseChar(String lettre) {
 		return this.alphaVersmorse.get(lettre.toLowerCase());
 	}
+	
+	public String morseToAlphaChar(String morse){
+		Pattern reg = Pattern.compile("^([\\.|-]+)$");
+		Matcher m = reg.matcher(morse);
+		if(m.matches()) {
+			return this.morseVersalpha.get(morse);
+		}
+		else throw new IllegalArgumentException();
+	}
 
 	public String alphaToMorse(String entry) {
-		entry = entry.toLowerCase();
+		entry = entry.toLowerCase().trim();
 
 		String result = "";
-		String[] tWords = entry.split(this.WORD_SEPARATOR_ALPHA);
+		String[] tWords = entry.split(Morse.WORD_SEPARATOR_ALPHA);
 		String[] tChars;
-		for(int i = 1; i < tWords.length; i++) {
-			tChars = tWords[i].split(this.CHAR_SEPARATOR_ALPHA);
-			for(int j = 1; j < tChars.length; j++) {
-				result += this.alphaToMorseChar(tChars[j]) + this.CHAR_SEPARATOR_MORSE;
+		for(int i = 0; i <= tWords.length; i++) {
+			tChars = tWords[i].split(Morse.CHAR_SEPARATOR_ALPHA);
+			for(int j = 0; j <= tChars.length; j++) {
+				result += this.alphaToMorseChar(tChars[j]) + Morse.CHAR_SEPARATOR_MORSE;
 			}
-			result += this.WORD_SEPARATOR_MORSE;
+			result += Morse.WORD_SEPARATOR_MORSE;
 		}
 
 		return result;
 	}
 
 	// traduit du morse vers l'alphabet en forçant en minuscules
-	public String morseToAlpha(String lettre) {
-		String str = this.morseVersalpha.get(lettre);
-		if(str == null)
-				str = this.WORD_SEPARATOR_ALPHA;
-		return str;
+	public String morseToAlpha(String entry) {
+		entry = entry.trim();
+		String result = "";
+		String[] tWords = entry.split(Morse.WORD_SEPARATOR_MORSE);
+		String[] tChars;
+		for(int i = 0; i < tWords.length; i++) {
+			tChars = tWords[i].split(Morse.CHAR_SEPARATOR_MORSE);
+			for(int j = 1; j < tChars.length; j++) {
+				result += this.morseToAlphaChar(tChars[j]) + Morse.CHAR_SEPARATOR_ALPHA;
+			}
+			result += Morse.WORD_SEPARATOR_ALPHA;
+		}
+		return result;
 	}
 
 	/**

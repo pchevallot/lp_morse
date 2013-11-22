@@ -19,5 +19,7 @@ public class TestMorse {
     	String bonjour = morseObj.alphaToMorse("Hey, bonjour ! 57");
     	System.out.println("" + bonjour);
     	// -... --- -. .--- --- ..- .-.    -.-.--    ..... --... 
+    	String bonjour2 = morseObj.morseToAlpha(" -... --- -. .--- --- ..- .-.    -.-.--    ..... --... ");
+    	System.out.println("" + bonjour2);
 	}
 }
