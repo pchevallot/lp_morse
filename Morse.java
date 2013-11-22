@@ -156,6 +156,12 @@ public class Morse {
 		this.delDict(mAlpha.group(1));
 	}
 	
+	public boolean alphaToMorseFile(String path)
+	{
+		
+	}
+	
+	
 	/**
 	 * Fonction readFile
 	 * Fonction qui lit un fichier ligne par ligne et en fait une chaine
