@@ -191,7 +191,7 @@ public class Morse {
 	 * Fonction qui écrit un fichier texte
 	 * @param f : fichier en sortie
 	 * @param content : contenu du futur fichier
-	 * @return true ou false
+	 * @return true si le fichier a été écrit, false s'il y a eu une erreur
 	 * @todo implémenter la fonction
 	 */
 	private static boolean writeFile(String f, String content)
