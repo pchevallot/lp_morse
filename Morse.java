@@ -5,6 +5,7 @@ import java.io.*;
 
 /**
  * Classe Morse
+ * @author pchevallot
  */
 public class Morse {
 	// Définition des attributs encapsulés dans la classe Morse
@@ -16,9 +17,9 @@ public class Morse {
 
 	// Définition des constantes : séparateurs de mots et de caractères
 	public static final String WORD_SEPARATOR_MORSE = "   ";
-	public static final char CHAR_SEPARATOR_MORSE = ' ';
-	public static final char WORD_SEPARATOR_ALPHA = ' ';
-	public static final String CHAR_SEPARATOR_ALPHA = null;
+	public static final String CHAR_SEPARATOR_MORSE = " ";
+	public static final String WORD_SEPARATOR_ALPHA = " ";
+	public static final String CHAR_SEPARATOR_ALPHA = "";
 
 	/**
 	 * Constructeur de la classe Morse
@@ -40,34 +41,38 @@ public class Morse {
 	}		
 
 	/**
-	 * Fonction alphaToMorse
+	 * Fonction alphaToMorseChar
 	 * Parcourt la hashmap et renvoie la paire clé-valeur pour la chaîne
-	 * @author pchevallot - Maschtaler Kévin
+	 * @author pchevallot
 	 * @param lettre
-	 * @return la chaîne en morse
+	 * @return le chaîne en morse
 	 */
-	// traduit de l'alphabet vers le morse
-	// Avec 'get' on récupère la valeur associée à la clé
-	public String alphaToMorse(String lettre) {
-		
-		// Kévin, comment puis-je tester si cette boucle fonctionne
-		// pour le parcours de la hashmap et la récupération du morse
-		// à partir de l'alphabet ?
-		for (Map.Entry<String, String> entry : alphaVersmorse.entrySet()) {
-			   System.out.println("[" + entry.getKey() +  "] -> " + entry.getValue()) ;
+	public String alphaToMorseChar(String lettre) {
+		return this.alphaVersmorse.get(lettre.toLowerCase());
+	}
+
+	public String alphaToMorse(String entry) {
+		entry = entry.toLowerCase();
+
+		String result = "";
+		String[] tWords = entry.split(this.WORD_SEPARATOR_ALPHA);
+		String[] tChars;
+		for(int i = 1; i < tWords.length; i++) {
+			tChars = tWords[i].split(this.CHAR_SEPARATOR_ALPHA);
+			for(int j = 1; j < tChars.length; j++) {
+				result += this.alphaToMorseChar(tChars[j]) + this.CHAR_SEPARATOR_MORSE;
 			}
-		
-		String str = this.alphaVersmorse.get(lettre);
-		if(str == null)		// s'il n'y a rien à traduire
-				str = " ";	// renvoie " "
-		return str;
+			result += this.WORD_SEPARATOR_MORSE;
+		}
+
+		return result;
 	}
 
 	// traduit du morse vers l'alphabet en forçant en minuscules
 	public String morseToAlpha(String lettre) {
-		String str = this.morseVersalpha.get(lettre.toLowerCase());
+		String str = this.morseVersalpha.get(lettre);
 		if(str == null)
-				str = " ";
+				str = this.WORD_SEPARATOR_ALPHA;
 		return str;
 	}
 

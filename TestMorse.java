@@ -16,6 +16,8 @@ public class TestMorse {
 
         Morse morseObj = new Morse();
     	// println(morseObj.readFile("./dict.ini"));
+    	String bonjour = morseObj.alphaToMorse("Hey, bonjour ! 57");
+    	System.out.println("" + bonjour);
+    	// -... --- -. .--- --- ..- .-.    -.-.--    ..... --... 
 	}
-
 }
