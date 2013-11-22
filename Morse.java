@@ -41,8 +41,8 @@ public class Morse {
 	}
 
 	private void delDict(String lettre) {
-		this.alphaVersmorse.remove(lettre);	// pour conversion alphabet vers morse
-		this.morseVersalpha.remove(point);	// pour conversion morse vers alphabet
+		this.morseVersalpha.remove(this.alphaVersmorse.get(lettre));	// pour conversion morse vers alphabet
+		this.alphaVersmorse.remove(lettre);								// pour conversion alphabet vers morse
 	}
 
 	/**
@@ -184,5 +184,19 @@ public class Morse {
 			System.out.println("Erreur de lecture de fichier : " + e.getMessage());
 			return null;
 		}
+	}
+
+	/**
+	 * Fonction writeFile
+	 * Fonction qui écrit un fichier texte
+	 * @param f : fichier en sortie
+	 * @param content : contenu du futur fichier
+	 * @return true ou false
+	 * @todo implémenter la fonction
+	 */
+	private static boolean writeFile(String f, String content)
+	{
+		// Ecrire un content dans un fichier d'adresse f
+		return false;
 	}
 }
