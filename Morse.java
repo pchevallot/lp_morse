@@ -10,12 +10,13 @@ import java.io.*;
 public class Morse {
 	// Définition des attributs encapsulés dans la classe Morse
 	// Avec HashMap qui est un tableau dynamique et associatif clé-valeur
+	// particulièrement  bien adaptée à la problématique du cahier des charges
 	// http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html
 	private HashMap<String,String> alphaVersmorse;
 	private HashMap<String,String> morseVersalpha;
-	private String dictionnaryPath = "./dict.ini";
+	private String dictionnaryPath = "./dict.ini"; // Conformément au cahier des charges, liste de conversions dans un dictionnaire
 
-	// Définition des constantes : séparateurs de mots et de caractères
+	// Définition des constantes : séparateurs de mots et de caractères ; définition des extensions de fichiers
 	public static final String WORD_SEPARATOR_MORSE = "   ";
 	public static final String CHAR_SEPARATOR_MORSE = " ";
 	public static final String WORD_SEPARATOR_ALPHA = " ";
@@ -31,20 +32,22 @@ public class Morse {
 		this.alphaVersmorse = new HashMap<String,String>();
 		this.morseVersalpha = new HashMap<String,String>();
 
-		// Initialisation du dictionnaire
+		// Initialisation du dictionnaire / liste de conversions
 		initDictionnary(dictionnaryPath);
 	}
 
-	// méthode appelée par le constructeur pour charger les conversions
-	// Avec 'put' on ajoute un couple 'clé-valeur'
+	// Conformément au cahier des charges, méthode appelée par le constructeur pour charger les conversions
+	// Avec 'put' on associe un couple 'clé-valeur' : ici on associe une clé String à un objet String
 	private void putDict(String lettre, String point) {
-		this.alphaVersmorse.put(lettre, point);	// pour conversion alphabet vers morse
-		this.morseVersalpha.put(point,lettre);	// pour conversion morse vers alphabet
+		this.alphaVersmorse.put(lettre, point);	// pour ajouter conversion alphabet vers morse
+		this.morseVersalpha.put(point,lettre);	// pour ajouter conversion morse vers alphabet
 	}
 
+	// Conformément au cahier des charges, méthode appelée par le constructeur pour supprimer les conversions
+	// Avec 'remove' on supprime un couple 'clé-valeur'
 	private void delDict(String lettre) {
-		this.morseVersalpha.remove(this.alphaVersmorse.get(lettre));	// pour conversion morse vers alphabet
-		this.alphaVersmorse.remove(lettre);								// pour conversion alphabet vers morse
+		this.morseVersalpha.remove(this.alphaVersmorse.get(lettre));	// pour supprimer conversion morse vers alphabet
+		this.alphaVersmorse.remove(lettre);								// pour supprimer conversion alphabet vers morse
 	}
 
 	/**
@@ -60,6 +63,12 @@ public class Morse {
 		return result;
 	}
 	
+	/**
+	 * morseToAlphaChar
+	 * 
+	 * @param morse
+	 * @return
+	 */
 	public String morseToAlphaChar(String morse){
 		Pattern reg = Pattern.compile("^([\\.|-]+)$");
 		Matcher m = reg.matcher(morse);
@@ -69,6 +78,12 @@ public class Morse {
 		else throw new IllegalArgumentException();
 	}
 
+	/**
+	 * alphaToMorse
+	 * Fonction traduit de l'alphabet (en forçant en minuscules au préalable) vers le morse
+	 * @param entry : une chaîne de caractères
+	 * @return : une chaîne de caractères
+	 */
 	public String alphaToMorse(String entry) {
 		entry = entry.toLowerCase().trim();
 
@@ -86,7 +101,12 @@ public class Morse {
 		return result;
 	}
 
-	// traduit du morse vers l'alphabet en forçant en minuscules
+	/**
+	 * morseToAlpha
+	 * Fonction qui traduit du morse vers l'alphabet
+	 * @param entry : une chaîne de caractères
+	 * @return : une chaîne de caractères
+	 */
 	public String morseToAlpha(String entry) {
 		String result = "";
 		String[] tWords = entry.split(Morse.WORD_SEPARATOR_MORSE);
@@ -110,23 +130,23 @@ public class Morse {
 	 */
 	public boolean alphaToMorseFile(String path)
 	{
-		String file = Morse.readFile(path);
-		String morse = this.alphaToMorse(file);
-		boolean save = Morse.writeFile(path + Morse.EXTENSION_MORSE, morse);
+		String file = Morse.readFile(path); // Utilisation de la fonction readFile pour lire le chemin
+		String morse = this.alphaToMorse(file); // Utilisation de la fonction alphaToMorse pour traduire la chaîne alphabétique en morse
+		boolean save = Morse.writeFile(path + Morse.EXTENSION_MORSE, morse); // Utilisation de la fonction writeFile pour enregistrer le fichier traduit
 		return save;
 	}
 	
 	/**
 	 * morseToAlphaFile
-	 * Fonction qui récupère le chemin du fichier morse pour le traduire en alphabétique
-	 * @param path
-	 * @return
+	 * Fonction qui récupère le chemin du fichier morse pour le traduire en alphabétique puis l'enregistrer
+	 * @param path : chemin sur le système
+	 * @return booleen : true si traduction OK
 	 */
 	public boolean morseToAlphaFile(String path)
 	{
-		String file = Morse.readFile(path);
-		String alpha = this.morseToAlpha(file);
-		boolean save = Morse.writeFile(path + Morse.EXTENSION_ALPHA, alpha);
+		String file = Morse.readFile(path); // Utilisation de la fonction readFile pour lire le chemin
+		String alpha = this.morseToAlpha(file); // Utilisation de la fonction morseToAlpha pour traduire la chaîne morse en alphabétique
+		boolean save = Morse.writeFile(path + Morse.EXTENSION_ALPHA, alpha); // Utilisation de la fonction writeFile pour enregistrer le fichier traduit
 		return save;
 	}
 
@@ -156,6 +176,13 @@ public class Morse {
 		}
 	}
 
+	/**
+	 * getDictionnary
+	 * Fonction qui permet de parcourir la HashMap grâce à la boucle "for" étendue
+	 * et l'objet Map.Entry nous permet d'avoir une vue sur la table :
+	 * getKey() et getValue() renvoient la clé et la valeur.
+	 * @return : une chaîne de caractères qui représente l'ensemble de la table HashMap
+	 */
 	public String getDictionnary() {
 		String result = "";
 		for (Map.Entry<String, String> entry : alphaVersmorse.entrySet()) {
@@ -164,6 +191,14 @@ public class Morse {
 		return result;
 	}
 
+	/**
+	 * addToDictionnary
+	 * Fonction qui ajoute un couple "caractère / code morse" conformément au cahier des charges
+	 * en utilisant la méthode putDict
+	 * @author Kévin Maschtaler
+	 * @param charAlpha
+	 * @param charMorse
+	 */
 	public void addToDictionnary(String charAlpha, String charMorse) {
 		Pattern patAlpha = Pattern.compile("^(.)$");
 		Pattern patMorse = Pattern.compile("^([\\.|-]+)$");
@@ -176,6 +211,12 @@ public class Morse {
 		this.putDict(mAlpha.group(1), mMorse.group(1));
 	}
 
+	/**
+	 * removeFromDictionnary
+	 * Fonction qui supprime un couple en spécifiant la clé qui est un caractère alphabétique
+	 * en utilisant la méthode delDict
+	 * @param charAlpha
+	 */
 	public void removeFromDictionnary(String charAlpha) {
 		Pattern patAlpha = Pattern.compile("^(.)$");
 		Matcher mAlpha = patAlpha.matcher(charAlpha);
@@ -189,9 +230,9 @@ public class Morse {
 	
 	/**
 	 * Fonction readFile
-	 * Fonction qui lit un fichier ligne par ligne et en fait une chaine
+	 * Fonction qui lit un fichier ligne par ligne et en fait une chaine de caractères
 	 * @param f : fichier en entrée
-	 * @return la chaine de caractère
+	 * @return la chaine de caractères
 	 */
 	private static String readFile(String f)
 	{

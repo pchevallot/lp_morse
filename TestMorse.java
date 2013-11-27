@@ -16,5 +16,14 @@ public class TestMorse {
     	// -... --- -. .--- --- ..- .-.    -.-.--    ..... --... 
     	String bonjour2 = morseObj.morseToAlpha(bonjour);
     	System.out.println("" + bonjour2);
+    	
+    	System.out.println("Utilisation de getDictionnary :");
+    	System.out.println("" + morseObj.getDictionnary());
+    	
+    	System.out.println("Utilisation de removeFromDictionnary :");
+    	System.out.println("Saisissez un caractère à supprimer : ");
+    	String sSupprimer = sc.nextLine();
+    	morseObj.removeFromDictionnary(sSupprimer);
+    	System.out.println("" + morseObj.getDictionnary());
 	}
 }
