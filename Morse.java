@@ -14,7 +14,7 @@ public class Morse {
 	// http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html
 	private HashMap<String,String> alphaVersmorse;
 	private HashMap<String,String> morseVersalpha;
-	private String dictionnaryPath = "./dict.ini"; // Conformément au cahier des charges, liste de conversions dans un dictionnaire
+	private String dictionnaryPath = "./dict.ini"; // Liste de conversions dans un dictionnaire
 
 	// Définition des constantes : séparateurs de mots et de caractères ; définition des extensions de fichiers
 	public static final String WORD_SEPARATOR_MORSE = "   ";
@@ -36,14 +36,14 @@ public class Morse {
 		initDictionnary(dictionnaryPath);
 	}
 
-	// Conformément au cahier des charges, méthode appelée par le constructeur pour charger les conversions
-	// Avec 'put' on associe un couple 'clé-valeur' : ici on associe une clé String à un objet String
+	// Méthode appelée par le constructeur pour charger les conversions
+	// Avec 'put' on associe un couple 'clé-valeur' : ici on associe une clé String à une valeur String
 	private void putDict(String lettre, String point) {
 		this.alphaVersmorse.put(lettre, point);	// pour ajouter conversion alphabet vers morse
 		this.morseVersalpha.put(point,lettre);	// pour ajouter conversion morse vers alphabet
 	}
 
-	// Conformément au cahier des charges, méthode appelée par le constructeur pour supprimer les conversions
+	// Méthode appelée par le constructeur pour supprimer les conversions
 	// Avec 'remove' on supprime un couple 'clé-valeur'
 	private void delDict(String lettre) {
 		this.morseVersalpha.remove(this.alphaVersmorse.get(lettre));	// pour supprimer conversion morse vers alphabet
@@ -53,6 +53,7 @@ public class Morse {
 	/**
 	 * Fonction alphaToMorseChar
 	 * Parcourt la hashmap et renvoie la paire clé-valeur pour la chaîne
+	 * Convertit un caractère alphanumérique en caractère morse
 	 * @author pchevallot
 	 * @param lettre
 	 * @return le chaîne en morse
@@ -65,7 +66,7 @@ public class Morse {
 	
 	/**
 	 * morseToAlphaChar
-	 * 
+	 * Convertit un caractère morse en caractère alphanumérique
 	 * @param morse
 	 * @return
 	 */
@@ -144,9 +145,9 @@ public class Morse {
 	 */
 	public boolean morseToAlphaFile(String path)
 	{
-		String file = Morse.readFile(path); // Utilisation de la fonction readFile pour lire le chemin
-		String alpha = this.morseToAlpha(file); // Utilisation de la fonction morseToAlpha pour traduire la chaîne morse en alphabétique
-		boolean save = Morse.writeFile(path + Morse.EXTENSION_ALPHA, alpha); // Utilisation de la fonction writeFile pour enregistrer le fichier traduit
+		String file = Morse.readFile(path);
+		String alpha = this.morseToAlpha(file);
+		boolean save = Morse.writeFile(path + Morse.EXTENSION_ALPHA, alpha);
 		return save;
 	}
 
