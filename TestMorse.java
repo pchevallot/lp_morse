@@ -13,6 +13,7 @@ public class TestMorse {
     	// println(morseObj.readFile("./dict.ini"));
     	String bonjour = morseObj.alphaToMorse(phrase);
     	System.out.println("" + bonjour);
+    	
     	// -... --- -. .--- --- ..- .-.    -.-.--    ..... --... 
     	String bonjour2 = morseObj.morseToAlpha(bonjour);
     	System.out.println("" + bonjour2);

@@ -267,9 +267,27 @@ public class Morse {
 	 * @return true si le fichier a été écrit, false s'il y a eu une erreur
 	 * @todo implémenter la fonction
 	 */
-	private static boolean writeFile(String f, String content)
+	private static boolean writeFile(String file, String content)
 	{
 		// Ecrire un content dans un fichier d'adresse f
+		PrintWriter write;
+		{
+			try
+			{
+				write = new PrintWriter(new FileWriter(file));
+				write.print(content);
+				write.flush();
+				write.close();
+			}
+			catch (NullPointerException a)
+			{
+				System.out.println("Erreur : pointeur nul : " + a.getMessage());
+			}
+			catch (IOException a)
+			{
+				System.out.println("Erreur d'entrée/sortie : " + a.getMessage());
+			}
+		}
 		return false;
 	}
 }
