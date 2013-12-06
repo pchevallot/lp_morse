@@ -129,9 +129,10 @@ public class Morse {
 	 * @param path : chemin sur le système
 	 * @return booleen : true si traduction OK
 	 */
+	// !!! J'ai modifier le Morse.readFile en this.readFile
 	public boolean alphaToMorseFile(String path)
 	{
-		String file = Morse.readFile(path); // Utilisation de la fonction readFile pour lire le chemin
+		String file = this.readFile(path); // Utilisation de la fonction readFile pour lire le chemin
 		String morse = this.alphaToMorse(file); // Utilisation de la fonction alphaToMorse pour traduire la chaîne alphabétique en morse
 		boolean save = Morse.writeFile(path + Morse.EXTENSION_MORSE, morse); // Utilisation de la fonction writeFile pour enregistrer le fichier traduit
 		return save;
@@ -143,9 +144,10 @@ public class Morse {
 	 * @param path : chemin sur le système
 	 * @return booleen : true si traduction OK
 	 */
+	// !!! J'ai modifier le Morse.readFile en this.readFile
 	public boolean morseToAlphaFile(String path)
 	{
-		String file = Morse.readFile(path);
+		String file = this.readFile(path);
 		String alpha = this.morseToAlpha(file);
 		boolean save = Morse.writeFile(path + Morse.EXTENSION_ALPHA, alpha);
 		return save;
@@ -235,7 +237,10 @@ public class Morse {
 	 * @param f : fichier en entrée
 	 * @return la chaine de caractères
 	 */
-	private static String readFile(String f)
+	
+	// !!! J'ai du modifier en public a la place de private static pour y accéder depuis la GUI
+	// A changer si c'est pourri car je ne sais pas comment faire autrement
+	public String readFile(String f)
 	{
 		Scanner sc = null;
 
@@ -247,7 +252,7 @@ public class Morse {
 			while (sc.hasNextLine( ))
 			{
 				row = sc.nextLine( );
-				text = text + row;
+				text = text + row + "\r\n";
 			}
 			sc.close(); // On ferme le fichier
 			return text.toLowerCase(); // renvoie une chaîne de caractères minuscules

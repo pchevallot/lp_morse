@@ -26,5 +26,7 @@ public class TestMorse {
     	String sSupprimer = sc.nextLine();
     	morseObj.removeFromDictionnary(sSupprimer);
     	System.out.println("" + morseObj.getDictionnary());
+    	
+    	morseObj.alphaToMorseFile("/home/pchevallot/Documents/traduire.txt");
 	}
 }
