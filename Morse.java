@@ -20,8 +20,6 @@ public class Morse {
 	public static final String CHAR_SEPARATOR_MORSE = " ";
 	public static final String WORD_SEPARATOR_ALPHA = " ";
 	public static final String CHAR_SEPARATOR_ALPHA = "";
-	public static final String EXTENSION_MORSE = ".morse";
-	public static final String EXTENSION_ALPHA = ".txt";
 
 	/**
 	 * Constructeur de la classe Morse
@@ -101,34 +99,6 @@ public class Morse {
 		}
 		return result;
 	}
-	
-	/**
-	 * alphaToMorseFile
-	 * Fonction qui récupère le chemin du fichier alpha pour le traduire en morse
-	 * @param path : chemin sur le système
-	 * @return booleen : true si traduction OK
-	 */
-	public boolean alphaToMorseFile(String path)
-	{
-		String file = Morse.readFile(path);
-		String morse = this.alphaToMorse(file);
-		boolean save = Morse.writeFile(path + Morse.EXTENSION_MORSE, morse);
-		return save;
-	}
-	
-	/**
-	 * morseToAlphaFile
-	 * Fonction qui récupère le chemin du fichier morse pour le traduire en alphabétique
-	 * @param path
-	 * @return
-	 */
-	public boolean morseToAlphaFile(String path)
-	{
-		String file = Morse.readFile(path);
-		String alpha = this.morseToAlpha(file);
-		boolean save = Morse.writeFile(path + Morse.EXTENSION_ALPHA, alpha);
-		return save;
-	}
 
 	/**
 	 * Fonction initDictionnary
@@ -185,7 +155,6 @@ public class Morse {
 
 		this.delDict(mAlpha.group(1));
 	}
-	
 	
 	/**
 	 * Fonction readFile
