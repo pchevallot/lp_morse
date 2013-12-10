@@ -1,3 +1,4 @@
+package appmorse;
 // package lp_morse;
 import java.util.*;
 

@@ -1,3 +1,4 @@
+package appmorse;
 // package lp_morse;
 import java.util.*;
 import java.util.regex.*;
@@ -14,7 +15,6 @@ public class Morse {
 	// http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html
 	private HashMap<String,String> alphaVersmorse;
 	private HashMap<String,String> morseVersalpha;
-	private String dictionnaryPath = "./dict.ini"; // Liste de conversions dans un dictionnaire
 
 	// Définition des constantes : séparateurs de mots et de caractères ; définition des extensions de fichiers
 	public static final String WORD_SEPARATOR_MORSE = "   ";
@@ -27,13 +27,15 @@ public class Morse {
 	/**
 	 * Constructeur de la classe Morse
 	 */
-	public Morse() {
+	public Morse(String path) throws FileNotFoundException {
 		// Initialisation des attributs
 		this.alphaVersmorse = new HashMap<String,String>();
 		this.morseVersalpha = new HashMap<String,String>();
 
 		// Initialisation du dictionnaire / liste de conversions
-		initDictionnary(dictionnaryPath);
+		if (this.initDictionnary(path) == false){
+			throw new FileNotFoundException();
+		}
 	}
 
 	// Méthode appelée par le constructeur pour charger les conversions
@@ -129,12 +131,12 @@ public class Morse {
 	 * @param path : chemin sur le système
 	 * @return booleen : true si traduction OK
 	 */
-	// !!! J'ai modifier le Morse.readFile en this.readFile
+
 	public boolean alphaToMorseFile(String path)
 	{
-		String file = this.readFile(path); // Utilisation de la fonction readFile pour lire le chemin
+		String file = Tools.readFile(path); // Utilisation de la fonction readFile pour lire le chemin
 		String morse = this.alphaToMorse(file); // Utilisation de la fonction alphaToMorse pour traduire la chaîne alphabétique en morse
-		boolean save = Morse.writeFile(path + Morse.EXTENSION_MORSE, morse); // Utilisation de la fonction writeFile pour enregistrer le fichier traduit
+		boolean save = Tools.writeFile(path + Morse.EXTENSION_MORSE, morse); // Utilisation de la fonction writeFile pour enregistrer le fichier traduit
 		return save;
 	}
 	
@@ -144,12 +146,12 @@ public class Morse {
 	 * @param path : chemin sur le système
 	 * @return booleen : true si traduction OK
 	 */
-	// !!! J'ai modifier le Morse.readFile en this.readFile
+
 	public boolean morseToAlphaFile(String path)
 	{
-		String file = this.readFile(path);
+		String file = Tools.readFile(path);
 		String alpha = this.morseToAlpha(file);
-		boolean save = Morse.writeFile(path + Morse.EXTENSION_ALPHA, alpha);
+		boolean save = Tools.writeFile(path + Morse.EXTENSION_ALPHA, alpha);
 		return save;
 	}
 
@@ -159,7 +161,7 @@ public class Morse {
 	 * @author Maschtaler Kévin
 	 * @param filepath String Chemin du fichier .ini
 	 */
-	public void initDictionnary(String filepath) {
+	private boolean initDictionnary(String filepath) {
 		try {
 			Scanner scan = new Scanner(new File(filepath));
 			String str = "";
@@ -174,8 +176,10 @@ public class Morse {
 				}
 			}
 			scan.close();
+			return true;
 		} catch(FileNotFoundException e) {
-			System.out.println("Erreur de lecture fichier : " + e.getMessage());
+			// System.out.println("Erreur de lecture fichier : " + e.getMessage());
+			return false;
 		}
 	}
 
@@ -228,71 +232,5 @@ public class Morse {
 			throw new IllegalArgumentException("Mauvaise clé. Spécifié : ["+ charAlpha +"]");
 
 		this.delDict(mAlpha.group(1));
-	}
-	
-	
-	/**
-	 * Fonction readFile
-	 * Fonction qui lit un fichier ligne par ligne et en fait une chaine de caractères
-	 * @param f : fichier en entrée
-	 * @return la chaine de caractères
-	 */
-	
-	// !!! J'ai du modifier en public a la place de private static pour y accéder depuis la GUI
-	// A changer si c'est pourri car je ne sais pas comment faire autrement
-	public String readFile(String f)
-	{
-		Scanner sc = null;
-
-		try
-		{
-			sc = new Scanner(new FileInputStream(f));
-			String row = null;
-			String text = null;
-			while (sc.hasNextLine( ))
-			{
-				row = sc.nextLine( );
-				text = text + row + "\r\n";
-			}
-			sc.close(); // On ferme le fichier
-			return text.toLowerCase(); // renvoie une chaîne de caractères minuscules
-		}
-		catch(FileNotFoundException e)
-		{
-			System.out.println("Erreur de lecture de fichier : " + e.getMessage());
-			return null;
-		}
-	}
-
-	/**
-	 * Fonction writeFile
-	 * Fonction qui écrit un fichier texte
-	 * @param f : fichier en sortie
-	 * @param content : contenu du futur fichier
-	 * @return true si le fichier a été écrit, false s'il y a eu une erreur
-	 * @todo implémenter la fonction
-	 */
-	private static boolean writeFile(String file, String content)
-	{
-		// Ecrire un content dans un fichier d'adresse f
-		PrintWriter write;
-		{
-			try
-			{
-				write = new PrintWriter(new FileWriter(file));
-				write.print(content);
-				write.flush();
-				write.close();
-			}
-			catch (NullPointerException a)
-			{
-				System.out.println("Erreur : pointeur nul : " + a.getMessage());
-			}
-			catch (IOException a)
-			{
-				System.out.println("Erreur d'entrée/sortie : " + a.getMessage());
-			}
-		}
-		return false;
 	}
 }
