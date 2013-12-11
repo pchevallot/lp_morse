@@ -27,6 +27,12 @@ import java.io.File;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+/**
+ * Classe Main
+ * Interface graphique utilisateur utilisant SWING
+ * @author pchevallot
+ *
+ */
 public class Main extends JFrame {
 
 	private JPanel contentPane;
@@ -35,7 +41,7 @@ public class Main extends JFrame {
 	private Morse morseObj;
 
 	/**
-	 * Launch the application.
+	 * Lance l'application graphique Traducteur Morse.
 	 */
 	public static void main(String[] args) {
 		try {
@@ -56,24 +62,27 @@ public class Main extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Fonction Main
 	 */
 	public Main() {
 		// definition des constantes
-		// setIconImage(Toolkit.getDefaultToolkit().getImage("/home/pchevallot/JAVA/lp_morse/lp_morse/information-icon.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/appmorse/dictionnaire-icon.png")));
 		setTitle("Traducteur Morse");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 360);
+		setBounds(100, 100, 700, 430);
 		
 		// définition des boutons et menus
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		JMenu mnFichier = new JMenu("Fichier");
 		final JMenuItem mntmOuvrir = new JMenuItem("Ouvrir");
+		mntmOuvrir.setIcon(new ImageIcon(Main.class.getResource("/appmorse/open_file.png")));
 		mntmOuvrir.setEnabled(false);
 		JMenuItem mntmQuitter = new JMenuItem("Quitter");
+		mntmQuitter.setIcon(new ImageIcon(Main.class.getResource("/appmorse/close.png")));
 		JMenu mnAide = new JMenu("Aide");
 		JMenuItem mntmAbout = new JMenuItem("About");
+		mntmAbout.setIcon(new ImageIcon(Main.class.getResource("/appmorse/information-icon.png")));
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -82,9 +91,10 @@ public class Main extends JFrame {
 		final JButton btnTraduireAlphabet = new JButton("Traduire Alphabet");
 		JButton btnEffacer = new JButton("Effacer");
 		JMenuItem mntmChargerDictionnaire = new JMenuItem("Charger dictionnaire");
+		mntmChargerDictionnaire.setIcon(new ImageIcon(Main.class.getResource("/appmorse/load_dictionnaire.png")));
 		final JTextArea txtrNotificationtextarea = new JTextArea();
 		txtrNotificationtextarea.setEnabled(false);
-		txtrNotificationtextarea.setBounds(12, 230, 672, 70);
+		txtrNotificationtextarea.setBounds(12, 230, 672, 140);
 		
 		// Définition des actions
 		// Ouvrir
@@ -142,7 +152,7 @@ public class Main extends JFrame {
 				System.exit(0);
 			}
 		});
-		// bouton traduire
+		// bouton traduire morse
 		btnTraduire.setEnabled(false);
 		btnTraduire.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -150,7 +160,7 @@ public class Main extends JFrame {
 				inPut.setText("");
 			}
 		});
-		// traduire alphabet
+		// bouton traduire alphabet
 		btnTraduireAlphabet.setEnabled(false);
 		btnTraduireAlphabet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -183,6 +193,12 @@ public class Main extends JFrame {
 				} catch (Exception ef) {
 					ef.getStackTrace();
 				}
+			}
+		});
+		// Menu About
+		mntmAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtrNotificationtextarea.setText("-------------------------------------\nTraducteur Morse JAVA\n-------------------------------------\nLicence Pro SIL GL - Kevin Maschtaler - Pascal Chevallot - Decembre 2013\nhttps://github.com/Kmaschta/lp_morse - https://github.com/pchevallot/lp_morse\n1-Charger le dictionnaire dict.ini\n2-Saisir ou ouvrir le fichier *.txt ou *.morse à traduire\n3-Utiliser les boutons appropriés pour traduire");
 			}
 		});
 		
