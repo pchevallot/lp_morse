@@ -112,7 +112,7 @@ public class Morse {
 	 */
 	public String morseToAlpha(String entry) {
 		String result = "";
-		String[] tWords = entry.split(Morse.WORD_SEPARATOR_MORSE);
+		String[] tWords = entry.trim().split(Morse.WORD_SEPARATOR_MORSE);
 		String[] tChars;
 		for(int i = 0; i < tWords.length; i++) {
 			tChars = tWords[i].split(Morse.CHAR_SEPARATOR_MORSE);

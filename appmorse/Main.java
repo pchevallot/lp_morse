@@ -24,13 +24,14 @@ import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
-
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class Main extends JFrame {
 
 	private JPanel contentPane;
 	private final JTextField inPut = new JTextField();
-	private final JTextPane outPut = new JTextPane();
+	private final JTextArea outPut = new JTextArea();
 	private Morse morseObj;
 
 	/**
@@ -59,7 +60,7 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		// definition des constantes
-		setIconImage(Toolkit.getDefaultToolkit().getImage("/home/pchevallot/JAVA/lp_morse/lp_morse/information-icon.png"));
+		// setIconImage(Toolkit.getDefaultToolkit().getImage("/home/pchevallot/JAVA/lp_morse/lp_morse/information-icon.png"));
 		setTitle("Traducteur Morse");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 360);
@@ -81,6 +82,9 @@ public class Main extends JFrame {
 		final JButton btnTraduireAlphabet = new JButton("Traduire Alphabet");
 		JButton btnEffacer = new JButton("Effacer");
 		JMenuItem mntmChargerDictionnaire = new JMenuItem("Charger dictionnaire");
+		final JTextArea txtrNotificationtextarea = new JTextArea();
+		txtrNotificationtextarea.setEnabled(false);
+		txtrNotificationtextarea.setBounds(12, 230, 672, 70);
 		
 		// Définition des actions
 		// Ouvrir
@@ -95,6 +99,31 @@ public class Main extends JFrame {
 					if (file.getAbsolutePath().toString() != null) {
 						// ce qu'on fait : afficher le texte à traduire
 						outPut.setText(Tools.readFile(file.getAbsolutePath().toString()));
+						String strAlpha = "("+ Morse.EXTENSION_ALPHA.replaceAll("\\.", "\\\\.") +")$";
+						String strMorse = "("+ Morse.EXTENSION_MORSE.replaceAll("\\.", "\\\\.") +")$";
+						String filePath = file.getAbsolutePath().toString();
+						Pattern patternAlpha = Pattern.compile(strAlpha, Pattern.CASE_INSENSITIVE);
+						Pattern patternMorse = Pattern.compile(strMorse, Pattern.CASE_INSENSITIVE);
+						Matcher mAlpha = patternAlpha.matcher(filePath);
+						Matcher mMorse = patternMorse.matcher(filePath);
+						if(mAlpha.find())
+						{
+							// txtrNotificationtextarea.setText("" + morseObj.alphaToMorseFile(filePath));
+							if(morseObj.alphaToMorseFile(filePath))
+								txtrNotificationtextarea.setText("Traduction réussie");
+							else
+								txtrNotificationtextarea.setText("Traduction échouée");
+						}
+						else if(mMorse.find())
+						{
+							if(morseObj.morseToAlphaFile(filePath))
+								txtrNotificationtextarea.setText("Traduction réussie");
+							else
+								txtrNotificationtextarea.setText("Traduction échouée");
+						}
+						else {
+							txtrNotificationtextarea.setText("Le fichier n'est pas un fichier .txt ou .morse");
+						}
 						// ce qu'on doit faire :
 						// - detecter si c'est un fichier morse ou alpha
 						// - appeller la fonction morseObj.alphaToMorseFile si c'est un fichier .txt
@@ -149,6 +178,7 @@ public class Main extends JFrame {
 						mntmOuvrir.setEnabled(true);
 						btnTraduire.setEnabled(true);
 						btnTraduireAlphabet.setEnabled(true);
+						txtrNotificationtextarea.setText("Dictionnaire chargé.");
 					}
 				} catch (Exception ef) {
 					ef.getStackTrace();
@@ -163,19 +193,19 @@ public class Main extends JFrame {
 		mnFichier.add(mntmQuitter);
 		menuBar.add(mnAide);
 		mnAide.add(mntmAbout);
-		btnTraduire.setBounds(67, 203, 149, 25);
+		btnTraduire.setBounds(67, 193, 149, 25);
 		contentPane.add(btnTraduire);
-		btnTraduireAlphabet.setBounds(283, 203, 162, 25);
+		btnTraduireAlphabet.setBounds(283, 193, 162, 25);
 		contentPane.add(btnTraduireAlphabet);
-		btnEffacer.setBounds(512, 203, 117, 25);
+		btnEffacer.setBounds(512, 193, 117, 25);
 		contentPane.add(btnEffacer);
 		outPut.setEditable(false);
+		contentPane.add(txtrNotificationtextarea);
 		
 		
 		outPut.setBounds(12, 12, 672, 138);
-		contentPane.add(outPut);		
-		
-		inPut.setText("alpha");
+		contentPane.add(outPut);
+		inPut.setToolTipText("Text à traduire");
 		inPut.setBounds(12, 159, 672, 22);
 		contentPane.add(inPut);
 		inPut.setColumns(10);
