@@ -92,6 +92,8 @@ public class Main extends JFrame {
 		JButton btnEffacer = new JButton("Effacer");
 		JMenuItem mntmChargerDictionnaire = new JMenuItem("Charger dictionnaire");
 		mntmChargerDictionnaire.setIcon(new ImageIcon(Main.class.getResource("/appmorse/load_dictionnaire.png")));
+		final JMenuItem mntmAfficherDictionnaire = new JMenuItem("Afficher dictionnaire");
+		mntmAfficherDictionnaire.setEnabled(false);
 		final JTextArea txtrNotificationtextarea = new JTextArea();
 		txtrNotificationtextarea.setEnabled(false);
 		txtrNotificationtextarea.setBounds(12, 230, 672, 140);
@@ -144,6 +146,13 @@ public class Main extends JFrame {
 				}
 			}
 		});
+		// Ouvrir Dictionnaire
+		mntmAfficherDictionnaire.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				outPut.setText(morseObj.getDictionnary());
+			}
+		});
+		
 		// Quitter
 		mntmQuitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -187,6 +196,7 @@ public class Main extends JFrame {
 							mntmOuvrir.setEnabled(true);
 							btnTraduire.setEnabled(true);
 							btnTraduireAlphabet.setEnabled(true);
+							mntmAfficherDictionnaire.setEnabled(true);
 							txtrNotificationtextarea.setText("Dictionnaire chargé.");
 						}
 					}
@@ -213,6 +223,7 @@ public class Main extends JFrame {
 		// Ajout des boutons à la fenetre
 		menuBar.add(mnFichier);
 		mnFichier.add(mntmChargerDictionnaire);
+		mnFichier.add(mntmAfficherDictionnaire);
 		mnFichier.add(mntmOuvrir);
 		mnFichier.add(mntmQuitter);
 		menuBar.add(mnAide);
