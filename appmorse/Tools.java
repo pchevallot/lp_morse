@@ -22,12 +22,13 @@ final class Tools {
 		try
 		{
 			sc = new Scanner(new FileInputStream(f));
-			String row = null;
-			String text = null;
-			while (sc.hasNextLine( ))
+			String row = "";
+			String text = "";
+			while (sc.hasNextLine())
 			{
-				row = sc.nextLine( );
-				text = text + row + "\r\n";
+				row = sc.nextLine();
+				if(row != null)
+					text = text + row + "\r\n";
 			}
 			sc.close(); // On ferme le fichier
 			return text.toLowerCase(); // renvoie une chaîne de caractères minuscules

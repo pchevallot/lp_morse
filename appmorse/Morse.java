@@ -27,15 +27,16 @@ public class Morse {
 	/**
 	 * Constructeur de la classe Morse
 	 */
-	public Morse(String path) throws FileNotFoundException {
+	public Morse() /* throws FileNotFoundException */ {
 		// Initialisation des attributs
 		this.alphaVersmorse = new HashMap<String,String>();
 		this.morseVersalpha = new HashMap<String,String>();
 
 		// Initialisation du dictionnaire / liste de conversions
+		/*
 		if (this.initDictionnary(path) == false){
 			throw new FileNotFoundException();
-		}
+		}*/
 	}
 
 	// Méthode appelée par le constructeur pour charger les conversions
@@ -62,7 +63,7 @@ public class Morse {
 	 */
 	public String alphaToMorseChar(String lettre) {
 		String result = this.alphaVersmorse.get(lettre.toLowerCase());
-		if(result == null) throw new IllegalArgumentException("Caractère absent du dictionnaire. Spécifié : " + lettre);
+		if(result == null) throw new IllegalArgumentException("Caractère absent du dictionnaire. Spécifié : '" + lettre +"'");
 		return result;
 	}
 	
@@ -88,7 +89,7 @@ public class Morse {
 	 * @return : une chaîne de caractères
 	 */
 	public String alphaToMorse(String entry) {
-		entry = entry.toLowerCase().trim();
+		entry = entry.toLowerCase().trim().replaceAll("[\r\n]+", Morse.WORD_SEPARATOR_ALPHA);
 
 		String result = "";
 		String[] tWords = entry.split(Morse.WORD_SEPARATOR_ALPHA);
@@ -112,7 +113,7 @@ public class Morse {
 	 */
 	public String morseToAlpha(String entry) {
 		String result = "";
-		String[] tWords = entry.trim().split(Morse.WORD_SEPARATOR_MORSE);
+		String[] tWords = entry.trim().replaceAll("[\r\n]+", Morse.WORD_SEPARATOR_MORSE).split(Morse.WORD_SEPARATOR_MORSE);
 		String[] tChars;
 		for(int i = 0; i < tWords.length; i++) {
 			tChars = tWords[i].split(Morse.CHAR_SEPARATOR_MORSE);
@@ -136,7 +137,7 @@ public class Morse {
 	{
 		String file = Tools.readFile(path); // Utilisation de la fonction readFile pour lire le chemin
 		String morse = this.alphaToMorse(file); // Utilisation de la fonction alphaToMorse pour traduire la chaîne alphabétique en morse
-		boolean save = Tools.writeFile(path + Morse.EXTENSION_MORSE, morse); // Utilisation de la fonction writeFile pour enregistrer le fichier traduit
+		boolean save = Tools.writeFile(path.replaceAll(Morse.EXTENSION_ALPHA, Morse.EXTENSION_MORSE), morse); // Utilisation de la fonction writeFile pour enregistrer le fichier traduit
 		return save;
 	}
 	
@@ -151,7 +152,7 @@ public class Morse {
 	{
 		String file = Tools.readFile(path);
 		String alpha = this.morseToAlpha(file);
-		boolean save = Tools.writeFile(path + Morse.EXTENSION_ALPHA, alpha);
+		boolean save = Tools.writeFile(path.replaceAll(Morse.EXTENSION_MORSE, Morse.EXTENSION_ALPHA), alpha);
 		return save;
 	}
 
@@ -161,7 +162,7 @@ public class Morse {
 	 * @author Maschtaler Kévin
 	 * @param filepath String Chemin du fichier .ini
 	 */
-	private boolean initDictionnary(String filepath) {
+	public boolean initDictionnary(String filepath) {
 		try {
 			Scanner scan = new Scanner(new File(filepath));
 			String str = "";

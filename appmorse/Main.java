@@ -38,7 +38,7 @@ public class Main extends JFrame {
 	private JPanel contentPane;
 	private final JTextField inPut = new JTextField();
 	private final JTextArea outPut = new JTextArea();
-	private Morse morseObj;
+	private final Morse morseObj = new Morse();
 
 	/**
 	 * Lance l'application graphique Traducteur Morse.
@@ -100,49 +100,47 @@ public class Main extends JFrame {
 		// Ouvrir
 		mntmOuvrir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				try {
-					JFileChooser JfileOpen = new JFileChooser();
-					JfileOpen.setDialogTitle("Ouvrir texte à traduire");
-					JfileOpen.showOpenDialog(null);
-					File file = JfileOpen.getSelectedFile();
-					if (file.getAbsolutePath().toString() != null) {
-						// ce qu'on fait : afficher le texte à traduire
-						outPut.setText(Tools.readFile(file.getAbsolutePath().toString()));
-						String strAlpha = "("+ Morse.EXTENSION_ALPHA.replaceAll("\\.", "\\\\.") +")$";
-						String strMorse = "("+ Morse.EXTENSION_MORSE.replaceAll("\\.", "\\\\.") +")$";
-						String filePath = file.getAbsolutePath().toString();
-						Pattern patternAlpha = Pattern.compile(strAlpha, Pattern.CASE_INSENSITIVE);
-						Pattern patternMorse = Pattern.compile(strMorse, Pattern.CASE_INSENSITIVE);
-						Matcher mAlpha = patternAlpha.matcher(filePath);
-						Matcher mMorse = patternMorse.matcher(filePath);
-						if(mAlpha.find())
-						{
-							// txtrNotificationtextarea.setText("" + morseObj.alphaToMorseFile(filePath));
-							if(morseObj.alphaToMorseFile(filePath))
-								txtrNotificationtextarea.setText("Traduction réussie");
-							else
-								txtrNotificationtextarea.setText("Traduction échouée");
+				JFileChooser JfileOpen = new JFileChooser();
+				JfileOpen.setDialogTitle("Ouvrir texte à traduire");
+				JfileOpen.showOpenDialog(null);
+				File file = JfileOpen.getSelectedFile();
+				if (file.getAbsolutePath().toString() != null) {
+					// ce qu'on fait : afficher le texte à traduire
+					outPut.setText(Tools.readFile(file.getAbsolutePath().toString()).trim());
+					String strAlpha = "("+ Morse.EXTENSION_ALPHA.replaceAll("\\.", "\\\\.") +")$";
+					String strMorse = "("+ Morse.EXTENSION_MORSE.replaceAll("\\.", "\\\\.") +")$";
+					String filePath = file.getAbsolutePath().toString();
+					Pattern patternAlpha = Pattern.compile(strAlpha, Pattern.CASE_INSENSITIVE);
+					Pattern patternMorse = Pattern.compile(strMorse, Pattern.CASE_INSENSITIVE);
+					Matcher mAlpha = patternAlpha.matcher(filePath);
+					Matcher mMorse = patternMorse.matcher(filePath);
+
+					if(mAlpha.find())
+					{
+						if(morseObj.alphaToMorseFile(filePath)) {
+							filePath = filePath.replaceAll(Morse.EXTENSION_ALPHA, Morse.EXTENSION_MORSE);
+							txtrNotificationtextarea.setText("Traduction réussie\nEmplacement : " + filePath);
+							outPut.setText(Tools.readFile(filePath));
 						}
-						else if(mMorse.find())
-						{
-							if(morseObj.morseToAlphaFile(filePath))
-								txtrNotificationtextarea.setText("Traduction réussie");
-							else
-								txtrNotificationtextarea.setText("Traduction échouée");
-						}
-						else {
-							txtrNotificationtextarea.setText("Le fichier n'est pas un fichier .txt ou .morse");
-						}
-						// ce qu'on doit faire :
-						// - detecter si c'est un fichier morse ou alpha
-						// - appeller la fonction morseObj.alphaToMorseFile si c'est un fichier .txt
-						// - appeller la fonction morseObj.morseToAlphaFiile si c'est un fichier .morse
-						// - afficher le message de réussite ou echec
-						// - afficher le résultat traduit + le chemin du fichier traduit
+						else
+							txtrNotificationtextarea.setText("Traduction échouée");
 					}
-				} catch (Exception ef) {
-					ef.getStackTrace();
+					else if(mMorse.find())
+					{
+						if(morseObj.morseToAlphaFile(filePath))
+						{
+							filePath = filePath.replaceAll(Morse.EXTENSION_MORSE, Morse.EXTENSION_ALPHA);
+							txtrNotificationtextarea.setText("Traduction réussie\nEmplacement : " + filePath);
+							outPut.setText(Tools.readFile(filePath));
+						}						
+						else
+							txtrNotificationtextarea.setText("Traduction échouée");
+					}
+					else {
+						txtrNotificationtextarea.setText("Le fichier n'est pas un fichier .txt ou .morse");
+					}
+					// ce qu'on doit faire :
+					// - afficher le résultat traduit + le chemin du fichier traduit
 				}
 			}
 		});
@@ -184,11 +182,13 @@ public class Main extends JFrame {
 					JfileOpen.showOpenDialog(null);
 					File file = JfileOpen.getSelectedFile();
 					if (file.getAbsolutePath().toString() != null) {
-						morseObj = new Morse(file.getAbsolutePath().toString());
-						mntmOuvrir.setEnabled(true);
-						btnTraduire.setEnabled(true);
-						btnTraduireAlphabet.setEnabled(true);
-						txtrNotificationtextarea.setText("Dictionnaire chargé.");
+						boolean val = morseObj.initDictionnary(file.getAbsolutePath().toString());
+						if(val) {
+							mntmOuvrir.setEnabled(true);
+							btnTraduire.setEnabled(true);
+							btnTraduireAlphabet.setEnabled(true);
+							txtrNotificationtextarea.setText("Dictionnaire chargé.");
+						}
 					}
 				} catch (Exception ef) {
 					ef.getStackTrace();
