@@ -198,7 +198,15 @@ public class Main extends JFrame {
 		// Menu About
 		mntmAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				txtrNotificationtextarea.setText("-------------------------------------\nTraducteur Morse JAVA\n-------------------------------------\nLicence Pro SIL GL - Kevin Maschtaler - Pascal Chevallot - Decembre 2013\nhttps://github.com/Kmaschta/lp_morse - https://github.com/pchevallot/lp_morse\n1-Charger le dictionnaire dict.ini\n2-Saisir ou ouvrir le fichier *.txt ou *.morse à traduire\n3-Utiliser les boutons appropriés pour traduire");
+				String t = "-------------------------------------\n";
+				t += "Traducteur Morse JAVA\n";
+				t += "-------------------------------------\n";
+				t += "Licence Pro SIL GL - Kévin Maschtaler - Pascal Chevallot - Decembre 2013\n";
+				t += "https://github.com/Kmaschta/lp_morse - https://github.com/pchevallot/lp_morse\n";
+				t += "1-Charger le dictionnaire dict.ini\n";
+				t += "2-Saisir ou ouvrir le fichier *.txt ou *.morse à traduire\n";
+				t += "3-Utiliser les boutons appropriés pour traduire";
+				txtrNotificationtextarea.setText(t);
 			}
 		});
 		
