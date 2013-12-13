@@ -59,7 +59,7 @@ public class Morse {
 	 * Convertit un caractère alphanumérique en caractère morse
 	 * @author pchevallot
 	 * @param lettre
-	 * @return le chaîne en morse
+	 * @return String : la chaîne en morse
 	 */
 	public String alphaToMorseChar(String lettre) {
 		String result = this.alphaVersmorse.get(lettre.toLowerCase());
@@ -71,7 +71,7 @@ public class Morse {
 	 * morseToAlphaChar
 	 * Convertit un caractère morse en caractère alphanumérique
 	 * @param morse
-	 * @return
+	 * @return String : renvoie une chaîne de caractères
 	 */
 	public String morseToAlphaChar(String morse){
 		Pattern reg = Pattern.compile("^([\\.|-]+)$");
@@ -86,7 +86,7 @@ public class Morse {
 	 * alphaToMorse
 	 * Fonction traduit de l'alphabet (en forçant en minuscules au préalable) vers le morse
 	 * @param entry : une chaîne de caractères
-	 * @return : une chaîne de caractères
+	 * @return String : une chaîne de caractères
 	 */
 	public String alphaToMorse(String entry) {
 		entry = entry.toLowerCase().trim().replaceAll("[\r\n]+", Morse.WORD_SEPARATOR_ALPHA);
@@ -109,7 +109,7 @@ public class Morse {
 	 * morseToAlpha
 	 * Fonction qui traduit du morse vers l'alphabet
 	 * @param entry : une chaîne de caractères
-	 * @return : une chaîne de caractères
+	 * @return String : une chaîne de caractères
 	 */
 	public String morseToAlpha(String entry) {
 		String result = "";
@@ -189,12 +189,27 @@ public class Morse {
 	 * Fonction qui permet de parcourir la HashMap grâce à la boucle "for" étendue
 	 * et l'objet Map.Entry nous permet d'avoir une vue sur la table :
 	 * getKey() et getValue() renvoient la clé et la valeur.
-	 * @return : une chaîne de caractères qui représente l'ensemble de la table HashMap
+	 * @return String : une chaîne de caractères qui représente l'ensemble de la table HashMap
 	 */
 	public String getDictionnary() {
 		String result = "";
 		for (Map.Entry<String, String> entry : alphaVersmorse.entrySet()) {
 			result += "[" + entry.getKey() +  "] -> " + entry.getValue() + "\n";
+		}
+		return result;
+	}
+	
+	/**
+	 * getDictAlpha
+	 * Fonction qui renvoie une liste de caractères alphabétiques
+	 * @return String : une chaîne de caractères
+	 */
+	public String[] getDictAlpha() {
+		String[] result = new String[alphaVersmorse.size()];
+		int i = 0;
+		for (Map.Entry<String, String> entry : alphaVersmorse.entrySet()) {
+			result[i] = entry.getKey();
+			i++;
 		}
 		return result;
 	}

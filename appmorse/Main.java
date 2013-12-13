@@ -1,5 +1,5 @@
 package appmorse;
-// import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -13,14 +13,12 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JTextArea;
-// import javax.swing.JTextPane;
-// import javax.swing.JTree;
+
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 
 import appmorse.Morse;
 
-// import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -31,6 +29,7 @@ import java.awt.Font;
 import java.awt.Color;
 
 import javax.swing.JLabel;
+import javax.swing.JComboBox;
 
 /**
  * Classe Main
@@ -75,13 +74,13 @@ public class Main extends JFrame {
 	 * Fonction Main
 	 */
 	public Main() {
-		// Définition des constantes
+		/* Définition des constantes */
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/appmorse/dictionnaire-icon.png")));
 		setTitle("Traducteur Morse");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 750, 550);
 		
-		// Définition des boutons et menus
+		/* Définition des boutons et menus */
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		JMenu mnFichier = new JMenu("Fichier");
@@ -112,8 +111,15 @@ public class Main extends JFrame {
 		txtrNotificationtextarea.setEnabled(false);
 		txtrNotificationtextarea.setBounds(12, 293, 722, 197);
 		JLabel lblZoneDeSaisie = new JLabel("Saisissez votre texte");
+		final JTextField txtAddalpha = new JTextField();
+		final JTextField txtAddmorse = new JTextField();
+		final JButton btnAjouter = new JButton("Ajouter");
+		btnAjouter.setEnabled(false);
+		final JButton btnSupprimer = new JButton("Supprimer");
+		btnSupprimer.setEnabled(false);
+		final JComboBox<String> comboBox = new JComboBox();
 		
-		// Définition des actions
+		/* Définition des actions */
 		// Ouvrir
 		mntmOuvrir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -131,33 +137,35 @@ public class Main extends JFrame {
 					Pattern patternMorse = Pattern.compile(strMorse, Pattern.CASE_INSENSITIVE);
 					Matcher mAlpha = patternAlpha.matcher(filePath);
 					Matcher mMorse = patternMorse.matcher(filePath);
-
-					if(mAlpha.find())
-					{
-						if(morseObj.alphaToMorseFile(filePath)) {
-							filePath = filePath.replaceAll(Morse.EXTENSION_ALPHA, Morse.EXTENSION_MORSE);
-							txtrNotificationtextarea.setText("Traduction réussie\nEmplacement : " + filePath);
-							outPut.setText(Tools.readFile(filePath));
-						}
-						else
-							txtrNotificationtextarea.setText("Traduction échouée");
-					}
-					else if(mMorse.find())
-					{
-						if(morseObj.morseToAlphaFile(filePath))
+					
+					try {
+						if(mAlpha.find())
 						{
-							filePath = filePath.replaceAll(Morse.EXTENSION_MORSE, Morse.EXTENSION_ALPHA);
-							txtrNotificationtextarea.setText("Traduction réussie\nEmplacement : " + filePath);
-							outPut.setText(Tools.readFile(filePath));
-						}						
-						else
-							txtrNotificationtextarea.setText("Traduction échouée");
+							if(morseObj.alphaToMorseFile(filePath)) {
+								filePath = filePath.replaceAll(Morse.EXTENSION_ALPHA, Morse.EXTENSION_MORSE);
+								txtrNotificationtextarea.setText("Traduction réussie\nEmplacement : " + filePath);
+								outPut.setText(Tools.readFile(filePath));
+							}
+							else
+								txtrNotificationtextarea.setText("Traduction échouée");
+						}
+						else if(mMorse.find())
+						{
+							if(morseObj.morseToAlphaFile(filePath))
+							{
+								filePath = filePath.replaceAll(Morse.EXTENSION_MORSE, Morse.EXTENSION_ALPHA);
+								txtrNotificationtextarea.setText("Traduction réussie\nEmplacement : " + filePath);
+								outPut.setText(Tools.readFile(filePath));
+							}						
+							else
+								txtrNotificationtextarea.setText("Traduction échouée");
+						}
+						else {
+							txtrNotificationtextarea.setText("Le fichier n'est pas un fichier .txt ou .morse");
+						}
+					} catch(IllegalArgumentException ex) {
+						txtrNotificationtextarea.setText(ex.getMessage());
 					}
-					else {
-						txtrNotificationtextarea.setText("Le fichier n'est pas un fichier .txt ou .morse");
-					}
-					// ce qu'on doit faire :
-					// - afficher le résultat traduit + le chemin du fichier traduit
 				}
 			}
 		});
@@ -180,8 +188,12 @@ public class Main extends JFrame {
 		btnTraduire.setEnabled(false);
 		btnTraduire.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				outPut.setText(outPut.getText() + "\n" + morseObj.alphaToMorse(inPut.getText()));
-				inPut.setText("");
+				try {
+					outPut.setText(outPut.getText() + "\n" + morseObj.alphaToMorse(inPut.getText()));
+					inPut.setText("");
+				} catch (IllegalArgumentException ex) {
+					txtrNotificationtextarea.setText(ex.getMessage());
+				}
 			}
 		});
 		
@@ -189,15 +201,46 @@ public class Main extends JFrame {
 		btnTraduireAlphabet.setEnabled(false);
 		btnTraduireAlphabet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				outPut.setText(outPut.getText() + "\n" + morseObj.morseToAlpha(inPut.getText()));
-				inPut.setText("");
+				try {
+					outPut.setText(outPut.getText() + "\n" + morseObj.morseToAlpha(inPut.getText()));
+					inPut.setText("");
+				} catch (IllegalArgumentException ex) {
+					txtrNotificationtextarea.setText(ex.getMessage());
+				}
 			}
 		});
 		
-		// Bouton effacer
+		// Bouton Effacer
 		btnEffacer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				outPut.setText("");
+			}
+		});
+		
+		// Bouton Ajouter
+		btnAjouter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+                    if(txtAddalpha.getText() != null && txtAddmorse.getText() != null) {
+                        morseObj.addToDictionnary(txtAddalpha.getText(), txtAddmorse.getText());
+                        comboBox.addItem(txtAddalpha.getText());
+                    }
+                } catch(IllegalArgumentException ex) {
+                    txtrNotificationtextarea.setText(ex.getMessage());
+                }
+			}
+		});
+		
+		// Bouton Supprimer
+		btnSupprimer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String c = comboBox.getSelectedItem().toString();
+                    morseObj.removeFromDictionnary(c);
+                    comboBox.removeItem(c);
+                } catch(IllegalArgumentException ex) {
+                    txtrNotificationtextarea.setText(ex.getMessage());
+                }
 			}
 		});
 		
@@ -211,12 +254,19 @@ public class Main extends JFrame {
 					JfileOpen.showOpenDialog(null);
 					File file = JfileOpen.getSelectedFile();
 					if (file.getAbsolutePath().toString() != null) {
-						boolean val = morseObj.initDictionnary(file.getAbsolutePath().toString());
+						boolean val = morseObj.initDictionnary(file.getAbsolutePath().toString());						
 						if(val) {
+							String[] tab = morseObj.getDictAlpha();
+							txtrNotificationtextarea.setText("test");
+							for(int i = 0; i < tab.length; i++) {
+								comboBox.addItem(tab[i]);
+							}
 							mntmOuvrir.setEnabled(true);
 							btnTraduire.setEnabled(true);
 							btnTraduireAlphabet.setEnabled(true);
 							mntmAfficherDictionnaire.setEnabled(true);
+							btnSupprimer.setEnabled(true);
+							btnAjouter.setEnabled(true);
 							txtrNotificationtextarea.setText("Dictionnaire chargé.");
 						}
 					}
@@ -260,7 +310,7 @@ public class Main extends JFrame {
 		outPut.setEditable(false);
 		contentPane.add(txtrNotificationtextarea);
 		
-		scrollPane.setBounds(12, 12, 722, 185);
+		scrollPane.setBounds(12, 12, 360, 185);
 		contentPane.add(scrollPane);
 		inPut.setToolTipText("Saisir ici le texte à traduire");
 		inPut.setBounds(12, 222, 722, 22);
@@ -269,6 +319,25 @@ public class Main extends JFrame {
 		
 		lblZoneDeSaisie.setBounds(22, 207, 168, 15);
 		contentPane.add(lblZoneDeSaisie);
+		
+		btnSupprimer.setBounds(545, 22, 128, 25);
+		contentPane.add(btnSupprimer);
+		
+		txtAddalpha.setToolTipText("Ajouter un caractère alphanumérique");
+		txtAddalpha.setBounds(406, 116, 114, 19);
+		contentPane.add(txtAddalpha);
+		txtAddalpha.setColumns(10);
+		
+		txtAddmorse.setToolTipText("Ajouter un sème Morse");
+		txtAddmorse.setBounds(559, 116, 114, 19);
+		contentPane.add(txtAddmorse);
+		txtAddmorse.setColumns(10);
+		
+		btnAjouter.setBounds(485, 147, 117, 25);
+		contentPane.add(btnAjouter);
+		
+		comboBox.setBounds(406, 22, 114, 24);
+		contentPane.add(comboBox);
 		
 	}
 }
