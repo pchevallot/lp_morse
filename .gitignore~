@@ -9,8 +9,8 @@
 .~lock.*
 
 # Eclipse files #
-#.metadata*
-#.classpath
-#.project
-#.settings*
-#.directory
+.metadata*
+.classpath
+.project
+.settings*
+.directory
