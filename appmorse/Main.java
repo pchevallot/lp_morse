@@ -1,5 +1,5 @@
 package appmorse;
-import java.awt.BorderLayout;
+// import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -13,19 +13,24 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-import javax.swing.JTree;
+// import javax.swing.JTextPane;
+// import javax.swing.JTree;
 import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
 
 import appmorse.Morse;
 
-import java.awt.GridLayout;
+// import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.awt.Font;
+import java.awt.Color;
+
+import javax.swing.JLabel;
 
 /**
  * Classe Main
@@ -35,9 +40,14 @@ import java.util.regex.Matcher;
  */
 public class Main extends JFrame {
 
+	/**
+	 * Objets graphiques : conteneur, champ de texte, zone de texte avec ascenseur
+	 */
+	private static final long serialVersionUID = 1129628262984965687L;
 	private JPanel contentPane;
 	private final JTextField inPut = new JTextField();
 	private final JTextArea outPut = new JTextArea();
+	private final JScrollPane scrollPane = new JScrollPane(outPut);
 	private final Morse morseObj = new Morse();
 
 	/**
@@ -65,13 +75,13 @@ public class Main extends JFrame {
 	 * Fonction Main
 	 */
 	public Main() {
-		// definition des constantes
+		// Définition des constantes
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/appmorse/dictionnaire-icon.png")));
 		setTitle("Traducteur Morse");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 430);
+		setBounds(100, 100, 750, 550);
 		
-		// définition des boutons et menus
+		// Définition des boutons et menus
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		JMenu mnFichier = new JMenu("Fichier");
@@ -81,7 +91,7 @@ public class Main extends JFrame {
 		JMenuItem mntmQuitter = new JMenuItem("Quitter");
 		mntmQuitter.setIcon(new ImageIcon(Main.class.getResource("/appmorse/close.png")));
 		JMenu mnAide = new JMenu("Aide");
-		JMenuItem mntmAbout = new JMenuItem("About");
+		JMenuItem mntmAbout = new JMenuItem("A propos de Traducteur Morse");
 		mntmAbout.setIcon(new ImageIcon(Main.class.getResource("/appmorse/information-icon.png")));
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -93,10 +103,15 @@ public class Main extends JFrame {
 		JMenuItem mntmChargerDictionnaire = new JMenuItem("Charger dictionnaire");
 		mntmChargerDictionnaire.setIcon(new ImageIcon(Main.class.getResource("/appmorse/load_dictionnaire.png")));
 		final JMenuItem mntmAfficherDictionnaire = new JMenuItem("Afficher dictionnaire");
+		mntmAfficherDictionnaire.setIcon(new ImageIcon(Main.class.getResource("/appmorse/open_dictionnaire.png")));
 		mntmAfficherDictionnaire.setEnabled(false);
 		final JTextArea txtrNotificationtextarea = new JTextArea();
+		txtrNotificationtextarea.setBackground(Color.BLACK);
+		txtrNotificationtextarea.setForeground(Color.DARK_GRAY);
+		txtrNotificationtextarea.setFont(new Font("Dialog", Font.BOLD, 12));
 		txtrNotificationtextarea.setEnabled(false);
-		txtrNotificationtextarea.setBounds(12, 230, 672, 140);
+		txtrNotificationtextarea.setBounds(12, 293, 722, 197);
+		JLabel lblZoneDeSaisie = new JLabel("Saisissez votre texte");
 		
 		// Définition des actions
 		// Ouvrir
@@ -146,6 +161,7 @@ public class Main extends JFrame {
 				}
 			}
 		});
+		
 		// Ouvrir Dictionnaire
 		mntmAfficherDictionnaire.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -159,7 +175,8 @@ public class Main extends JFrame {
 				System.exit(0);
 			}
 		});
-		// bouton traduire morse
+		
+		// Bouton traduire morse
 		btnTraduire.setEnabled(false);
 		btnTraduire.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -167,7 +184,8 @@ public class Main extends JFrame {
 				inPut.setText("");
 			}
 		});
-		// bouton traduire alphabet
+		
+		// Bouton traduire alphabet
 		btnTraduireAlphabet.setEnabled(false);
 		btnTraduireAlphabet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -175,13 +193,15 @@ public class Main extends JFrame {
 				inPut.setText("");
 			}
 		});
-		// bouton effacer
+		
+		// Bouton effacer
 		btnEffacer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				outPut.setText("");
 			}
 		});
-		// charger dictionnaire
+		
+		// Charger dictionnaire
 		mntmChargerDictionnaire.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -205,17 +225,20 @@ public class Main extends JFrame {
 				}
 			}
 		});
+		
 		// Menu About
 		mntmAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String t = "-------------------------------------\n";
 				t += "Traducteur Morse JAVA\n";
 				t += "-------------------------------------\n";
-				t += "Licence Pro SIL GL - Kévin Maschtaler - Pascal Chevallot - Decembre 2013\n";
-				t += "https://github.com/Kmaschta/lp_morse - https://github.com/pchevallot/lp_morse\n";
-				t += "1-Charger le dictionnaire dict.ini\n";
-				t += "2-Saisir ou ouvrir le fichier *.txt ou *.morse à traduire\n";
-				t += "3-Utiliser les boutons appropriés pour traduire";
+				t += "Kévin Maschtaler - Pascal Chevallot - Licence Pro SIL Génie Logiciel - Décembre 2013\n\n";
+				t += "Suivre le projet et les sources GNU GPL v2 :\n";
+				t += "https://github.com/Kmaschta/lp_morse - https://github.com/pchevallot/lp_morse\n\n";
+				t += "1 - Charger le dictionnaire dict.ini\n";
+				t += "2 - Saisir le texte à traduire dans la zone de saisie\n";
+				t += "3 - Utiliser les boutons appropriés pour traduire\n";
+				t += "4 - Ou bien ouvrir le fichier *.txt ou *.morse à traduire : votre fichier est traduit automatiquement.";
 				txtrNotificationtextarea.setText(t);
 			}
 		});
@@ -228,22 +251,24 @@ public class Main extends JFrame {
 		mnFichier.add(mntmQuitter);
 		menuBar.add(mnAide);
 		mnAide.add(mntmAbout);
-		btnTraduire.setBounds(67, 193, 149, 25);
+		btnTraduire.setBounds(76, 256, 149, 25);
 		contentPane.add(btnTraduire);
-		btnTraduireAlphabet.setBounds(283, 193, 162, 25);
+		btnTraduireAlphabet.setBounds(304, 256, 162, 25);
 		contentPane.add(btnTraduireAlphabet);
-		btnEffacer.setBounds(512, 193, 117, 25);
+		btnEffacer.setBounds(545, 256, 117, 25);
 		contentPane.add(btnEffacer);
 		outPut.setEditable(false);
 		contentPane.add(txtrNotificationtextarea);
 		
-		
-		outPut.setBounds(12, 12, 672, 138);
-		contentPane.add(outPut);
-		inPut.setToolTipText("Text à traduire");
-		inPut.setBounds(12, 159, 672, 22);
+		scrollPane.setBounds(12, 12, 722, 185);
+		contentPane.add(scrollPane);
+		inPut.setToolTipText("Saisir ici le texte à traduire");
+		inPut.setBounds(12, 222, 722, 22);
 		contentPane.add(inPut);
 		inPut.setColumns(10);
+		
+		lblZoneDeSaisie.setBounds(22, 207, 168, 15);
+		contentPane.add(lblZoneDeSaisie);
 		
 	}
 }
