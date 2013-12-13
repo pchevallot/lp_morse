@@ -339,5 +339,13 @@ public class Main extends JFrame {
 		comboBox.setBounds(406, 22, 114, 24);
 		contentPane.add(comboBox);
 		
+		JLabel lblAlphanumrique = new JLabel("Alphanumérique");
+		lblAlphanumrique.setBounds(406, 100, 128, 15);
+		contentPane.add(lblAlphanumrique);
+		
+		JLabel lblMorse = new JLabel("Morse");
+		lblMorse.setBounds(559, 100, 70, 15);
+		contentPane.add(lblMorse);
+		
 	}
 }
