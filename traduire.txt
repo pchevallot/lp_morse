@@ -1,0 +1,16 @@
+Bonjour
+
+Voici un exemple de texte .txt qui sera traduit
+par le traducteur Morse :
+avec realisation d'une interface homme-machine (IHM).
+Vous devez charger un dictionnaire dict.ini qui se trouve
+dans ce dossier.
+Vous pouvez ensuite afficher le dictionnaire et le manipuler :
+1 supprimer caracteres
+2 ajouter caracteres
+3 traduire depuis une ligne de saisie libre
+4 traduire depuis un fichier .txt ou .morse
+
+pascal@chevallot.net
+maschtaler.kevin.iris@gmail.com
+13 decembre 2013 
